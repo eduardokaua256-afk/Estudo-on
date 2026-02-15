@@ -1,68 +1,143 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Estudos Online</title>
-  <link rel="stylesheet" href="css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SentryOS | Extreme Security Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+        }
+        .premium-glow {
+            box-shadow: 0 0 15px rgba(168, 85, 247, 0.4);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+        }
+        .status-online { color: #10b981; text-shadow: 0 0 8px #10b981; }
+        @keyframes pulse-red { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        .scanning { animation: pulse-red 1.5s infinite; }
+    </style>
 </head>
-<body>
+<body class="p-4 md:p-8">
 
-  <!-- Botão de menu lateral -->
-  <div id="menuBtn">&#9776;</div>
+    <header class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
+        <div class="flex items-center gap-4 glass p-4 pr-8">
+            <img id="user-avatar" src="https://ui-avatars.com/api/?name=User&background=6b21a8&color=fff" class="w-16 h-16 rounded-full border-2 border-purple-500 shadow-lg">
+            <div>
+                <h2 id="user-name" class="font-bold text-xl tracking-wide">Carregando...</h2>
+                <p id="user-bio" class="text-sm text-slate-400">Sincronizando bio segura...</p>
+                <span id="premium-badge" class="hidden text-[10px] font-bold bg-purple-600 text-white px-2 py-0.5 rounded-full mt-1 inline-block uppercase tracking-tighter">Premium Active</span>
+            </div>
+        </div>
+        
+        <div class="text-right glass p-4">
+            <div class="text-xs text-slate-400 uppercase tracking-widest">Nível de Proteção</div>
+            <div class="text-2xl font-mono font-bold text-emerald-400">MÁXIMO (256-BIT)</div>
+        </div>
+    </header>
 
-  <!-- Barra lateral -->
-  <div id="sidebar">
-    <div class="sidebar-header">
-      <h2>Menu</h2>
-      <span id="closeBtn">&times;</span>
-    </div>
-    <input type="text" placeholder="Pesquisar..." id="searchBar">
-    <a href="#home">Home</a>
-    <a href="#sobre">Sobre</a>
-    <a href="#estudos">Estudos</a>
-    <a href="#">Configurações</a>
-  </div>
+    <main class="max-width-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <section class="glass p-6 flex flex-col items-center">
+            <i class="fas fa-shield-halved text-4xl text-blue-500 mb-4"></i>
+            <h3 class="text-xl font-semibold mb-2">Quantum VPN</h3>
+            <p class="text-sm text-slate-400 text-center mb-6">Túnel WireGuard com criptografia pós-quântica.</p>
+            <div id="vpn-status" class="mb-4 font-mono text-sm uppercase">Status: <span class="text-red-500">Desconectado</span></div>
+            <button onclick="toggleVPN()" id="vpn-btn" class="w-full bg-blue-600 hover:bg-blue-500 transition-all py-3 rounded-lg font-bold">LIGAR VPN</button>
+        </section>
 
-  <!-- Overlay -->
-  <div id="overlay"></div>
+        <section class="glass p-6 flex flex-col items-center border-t-4 border-emerald-500">
+            <i class="fas fa-user-secret text-4xl text-emerald-500 mb-4"></i>
+            <h3 class="text-xl font-semibold mb-2">Web-Anon</h3>
+            <p class="text-sm text-slate-400 text-center mb-4">Navegação via proxy isolado em Sandbox (RAM-Only).</p>
+            <input type="text" placeholder="https://url-anonima.com" class="w-full bg-slate-900 border border-slate-700 rounded p-2 mb-4 text-sm focus:outline-none focus:border-emerald-500">
+            <button class="w-full bg-emerald-600 hover:bg-emerald-500 transition-all py-3 rounded-lg font-bold">ABRIR NAVEGADOR</button>
+        </section>
 
-  <!-- Cabeçalho -->
-  <header>
-    <h1>Estudos Online</h1>
-  </header>
+        <section class="glass p-6 flex flex-col items-center">
+            <i class="fas fa-virus-slash text-4xl text-red-500 mb-4"></i>
+            <h3 class="text-xl font-semibold mb-2">Cloud Scan</h3>
+            <p class="text-sm text-slate-400 text-center mb-4">Verificação de arquivos via IA heurística.</p>
+            <div id="scan-feedback" class="h-10 text-xs font-mono text-slate-300">Aguardando arquivo...</div>
+            <label class="w-full bg-red-600 hover:bg-red-500 transition-all py-3 rounded-lg font-bold text-center cursor-pointer">
+                ESCANEAR ARQUIVO
+                <input type="file" class="hidden" onchange="simulateScan(this)">
+            </label>
+        </section>
 
-  <!-- Conteúdo principal -->
-  <main>
-    <section id="home">
-      <h2>Bem-vindo!</h2>
-      <p>Este é um site completo de estudos, feito para celular e totalmente responsivo.</p>
-      <p>Aqui você vai encontrar resumos, exercícios e dicas de estudo.</p>
-    </section>
+    </main>
 
-    <section id="sobre">
-      <h2>Sobre o site</h2>
-      <p>O objetivo deste site é centralizar conteúdos educativos de forma clara, leve e acessível.</p>
-      <p>Você poderá consultar matérias, fazer exercícios e acompanhar novidades em estudo.</p>
-    </section>
+    <footer class="mt-12 text-center text-slate-500 text-xs">
+        &copy; 2026 SentryOS Security. Zero Logs Policy Ativa.
+    </footer>
 
-    <section id="estudos">
-      <h2>Estudos</h2>
-      <h3>Matemática</h3>
-      <p>Resumos e exercícios de matemática básica e concursos.</p>
-      <h3>Português</h3>
-      <p>Gramática, redação e interpretação de textos.</p>
-      <h3>História e Geografia</h3>
-      <p>Conteúdos atualizados e resumidos para estudo rápido.</p>
-    </section>
-  </main>
+    <script>
+        // Sistema de Persistência de Perfil (Conforme suas instruções)
+        const userData = {
+            name: "Usuário Protetor",
+            bio: "Especialista em Criptografia & Privacidade",
+            premium: true,
+            avatar: "https://api.dicebear.com/7.x/identicon/svg?seed=security2026"
+        };
 
-  <!-- Rodapé -->
-  <footer>
-    <p>© 2026 Estudos Online | Todos os direitos reservados</p>
-  </footer>
+        function loadProfile() {
+            // Verifica se há dados salvos, senão usa o padrão e salva
+            const saved = localStorage.getItem('user_profile');
+            const data = saved ? JSON.parse(saved) : userData;
+            
+            if(!saved) localStorage.setItem('user_profile', JSON.stringify(data));
 
-  <!-- JS -->
-  <script src="js/script.js"></script>
+            document.getElementById('user-name').innerText = data.name;
+            document.getElementById('user-bio').innerText = data.bio;
+            document.getElementById('user-avatar').src = data.avatar;
+            
+            if(data.premium) {
+                document.getElementById('premium-badge').classList.remove('hidden');
+                document.querySelector('.glass').classList.add('premium-glow');
+            }
+        }
+
+        // Simulação de VPN
+        let vpnActive = false;
+        function toggleVPN() {
+            vpnActive = !vpnActive;
+            const status = document.getElementById('vpn-status');
+            const btn = document.getElementById('vpn-btn');
+            
+            if(vpnActive) {
+                status.innerHTML = 'Status: <span class="status-online">Conectado (Zurich, CH)</span>';
+                btn.innerText = "DESCONECTAR";
+                btn.className = "w-full bg-slate-700 hover:bg-slate-600 py-3 rounded-lg font-bold";
+            } else {
+                status.innerHTML = 'Status: <span class="text-red-500">Desconectado</span>';
+                btn.innerText = "LIGAR VPN";
+                btn.className = "w-full bg-blue-600 hover:bg-blue-500 py-3 rounded-lg font-bold";
+            }
+        }
+
+        // Simulação de Antivírus
+        function simulateScan(input) {
+            const feedback = document.getElementById('scan-feedback');
+            if (input.files.length > 0) {
+                feedback.innerHTML = '<span class="scanning text-red-400 uppercase tracking-tighter">Escaneando ameaças em Sandbox...</span>';
+                setTimeout(() => {
+                    feedback.innerHTML = '<span class="text-emerald-400 font-bold">✓ ARQUIVO SEGURO (MD5: 098...AF)</span>';
+                }, 3000);
+            }
+        }
+
+        // Inicialização
+        window.onload = loadProfile;
+    </script>
 </body>
 </html>
